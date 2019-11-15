@@ -10,7 +10,7 @@ To run just the similarity script/code:
     --> By default, the 3 scores related to the assessment's Samples will be printed after the results from the strings previously entered.
 
 To run the application as a web service, navigate to the link below:
-https://hub.docker.com/repository/docker/rmclelland/coding_challenge/general
+https://hub.docker.com/r/rmclelland/coding_challenge
 
 
 
