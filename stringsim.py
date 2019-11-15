@@ -48,16 +48,32 @@ class StringSim:
 
         # find intersection of two sets, calculate score based upon Jaccard Similarity
         c = a.intersection(b)
-        return pd.DataFrame({'Score':[float(len(c)) / (len(a) + len(b) - len(c))]})
+        try:
+            scoreDf = pd.DataFrame({'Score':[float(len(c)) / (len(a) + len(b) - len(c))]})
+            return scoreDf
+        except:
+            return pd.DataFrame({'Score':[0]})
 
 if __name__ == '__main__':
+    s = StringSim()
+    user_input1 = str(input("\nEnter Sample 1: "))
+    user_input2 = str(input("Enter Sample 2: "))
+    score = round(s.run(user_input1, user_input2)['Score'][0], 3)
+    print("\n--Case Score--")
+    print('User Sample 1: ', user_input1)
+    print('User Sample 2: ', user_input2)
+    print('Score: ', score)
+
+    # Default Sample Scores
     str1 = "The easiest way to earn points with Fetch Rewards is to just shop for the products you already love. If you have any participating brands on your receipt, you'll get points based on the cost of the products. You don't need to clip any coupons or scan individual barcodes. Just scan each grocery receipt after you shop and we'll find the savings for you."
     str2 = "The easiest way to earn points with Fetch Rewards is to just shop for the items you already buy. If you have any eligible brands on your receipt, you will get points based on the total cost of the products. You do not need to cut out any coupons or scan individual UPCs. Just scan your receipt after you check out and we will find the savings for you."
     str3 = "We are always looking for opportunities for you to earn more points, which is why we also give you a selection of Special Offers. These Special Offers are opportunities to earn bonus points on top of the regular points you earn every time you purchase a participating brand. No need to pre-select these offers, we'll give you the points whether or not you knew about the offer. We just think it is easier that way."
-    s = StringSim()
-    sim12 = s.run(str1, str2)['Score'][0] * 100
-    sim13 = s.run(str1, str3)['Score'][0] * 100
-    sim23 = s.run(str2, str3)['Score'][0] * 100
-    print('Sample1 is %2.2f%% similar to Sample2' % (sim12))
-    print('Sample1 is %2.2f%% similar to Sample3' % (sim13))
-    print('Sample2 is %2.2f%% similar to Sample3' % (sim23))
+    score12 = round(s.run(str1, str2)['Score'][0], 3)
+    score13 = round(s.run(str1, str3)['Score'][0], 3)
+    score23 = round(s.run(str2, str3)['Score'][0], 3)
+    print("\n--Default Sample Scores--")
+    print('Sample1, Sample2 score= ', score12)
+    print('Sample1, Sample3 score= ', score13)
+    print('Sample2, Sample3 score= ', score23)
+
+
