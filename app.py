@@ -1,48 +1,21 @@
-from flask import Flask, url_for, request, json, jsonify
-import stringsim
+from flask import Flask, request
+from flask_cors import CORS
+from textcompare import TextCompare
 
-s = stringsim.StringSim()
 app = Flask(__name__)
-stored_data = "Data Engineer Coding Challenge"
+CORS(app)
 
 @app.route('/')
-def api_root():
-    return 'Welcome'
-        
-@app.route('/echo', methods = ['GET', 'POST', 'PATCH', 'PUT', 'DELETE'])
-def api_echo():
-    if request.method == 'GET':
-        return "ECHO: GET\n"
+def index():
+    out_string = "Text Compare Exercise"
+    return out_string
+      
+@app.route('/compare', methods = ['POST'])
+def compare():
+    data = request.get_json()
+    text1, text2 = data['text1'], data['text2']
+    text_compare = TextCompare(text1=text1, text2=text2)
+    return text_compare.compare()
 
-    elif request.method == 'POST':
-        return "ECHO: POST\n"
-
-    elif request.method == 'PATCH':
-        return "ECHO: PATCH\n"
-
-    elif request.method == 'PUT':
-        return "ECHO: PUT\n"
-
-    elif request.method == 'DELETE':
-        return "ECHO: DELETE"
-        
-@app.route('/challenge', methods = ['GET', 'POST'])
-def api_message():
-    if request.method=='POST':
-        if request.headers['Content-Type'] == 'application/json':
-            str1 = request.json['sample1']
-            str2 = request.json['sample2']
-            score = round(s.run(str1, str2)['Score'][0],3)
-            global stored_data
-            stored_data = json.dumps({"sample1":str1, 
-                                      "sample2":str2, 
-                                      "similarity":score})
-            return stored_data
-
-        else:
-            return "415 Unsupported Media Type ;)"
-    else:
-        return stored_data
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    app.run(debug=True, host="0.0.0.0")
